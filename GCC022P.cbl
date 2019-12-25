@@ -6,7 +6,7 @@
       *    MODULO......: Carteira de clientes Vendedores Novos         *
       *    PROGRAMA....: GCC021P                                       *
       *    AUTHOR......: Leo Ribeiro e Silva Santos                    *
-      *    DATA........: 21/12/2019                                    *
+      *    DATA........: 22/12/2019                                    *
       *    OBJETIVO ...: Relatorio vendedores                          *
       *----------------------------------------------------------------*
       *================================================================*
