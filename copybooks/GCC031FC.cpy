@@ -8,6 +8,5 @@
                ORGANIZATION            IS INDEXED
                ACCESS MODE             IS DYNAMIC
                RECORD KEY              IS DIST-CLIE-CODIGO
-               ALTERNATE RECORD KEY    IS DIST-VEND-CODIGO
                LOCK MODE               IS MANUAL
                FILE STATUS             IS WS-RESULTADO-ACESSO.

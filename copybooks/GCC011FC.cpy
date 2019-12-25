@@ -9,7 +9,6 @@
                ACCESS MODE             IS DYNAMIC
                RECORD KEY              IS CLIE-CODIGO
                ALTERNATE KEY           IS CLIE-CNPJ
-               ALTERNATE KEY           IS CLIE-RAZAO-SOCIAL
                                        WITH DUPLICATES
                LOCK MODE               IS MANUAL
                FILE STATUS             IS WS-RESULTADO-ACESSO.

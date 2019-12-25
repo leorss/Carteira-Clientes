@@ -112,26 +112,27 @@
            SET ENVIRONMENT 'ESCDELAY'              TO '25'.
 
            PERFORM UNTIL W-FIM EQUAL "S"
-               MOVE "N"                    TO W-GRAVADO
-               MOVE "N"                    TO W-VOLTAR
+               MOVE "N"                TO W-GRAVADO
+               MOVE "N"                TO W-VOLTAR
 
                MOVE "Distribuicao Clientes"
                                        TO  W-MODULO
                MOVE WID-ARQ-DISTRIBUICAO
-                                          TO  W-ARQ-RELATO
+                                       TO  W-ARQ-RELATO
                                            S-NOME-ARQ
+
                MOVE "<Esc> Voltar <Enter> Processar"
-                                   TO W-STATUS
+                                       TO W-STATUS
                DISPLAY S-CLS
                DISPLAY S-TELA-ACC-ARQ
+               ACCEPT S-NOME-ARQ
 
-               IF  W-VOLTAR        EQUAL "N"
-                   ACCEPT S-NOME-ARQ
-                   IF COB-CRT-STATUS NOT EQUAL COB-SCR-ESC
-                       PERFORM 1000-PROCESSAR
+               IF  COB-CRT-STATUS NOT EQUAL COB-SCR-ESC
+                   PERFORM 2100-ABRIR-ARQUIVOS
+                   IF  W-VOLTAR        EQUAL "N"
+                       PERFORM 2000-PROCESSAR
                    END-IF
                END-IF
-
                GOBACK
            END-PERFORM.
 
@@ -140,94 +141,101 @@
       *----------------------------------------------------------------*
 
       *----------------------------------------------------------------*
-       1000-PROCESSAR.
+       2000-PROCESSAR.
       *----------------------------------------------------------------*
 
-           MOVE "N"                    TO W-VOLTAR
-           MOVE "N"                    TO W-GRAVADO
-
-           PERFORM 2100-ABRIR-ARQUIVOS
-
-           IF  W-VOLTAR EQUAL "N"
+           PERFORM 7111-ABRIR-INPUT-ARQ-CLIE
+           IF  NOT FS-OK
+               MOVE "S"                TO W-VOLTAR
+           ELSE
                PERFORM 7153-LER-PROX-ARQ-CLIE
-               IF  FS-FIM
-                   MOVE "S"         TO W-VOLTAR
-                   MOVE  "Arquivo Clientes vazio, tecle <Enter>"
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+               END-IF
+           END-IF
+
+           PERFORM 1100-REALIZAR-DIST UNTIL FS-FIM  OR
+                                          W-VOLTAR  EQUAL "S"
+
+           PERFORM 7190-FECHAR-ARQ-CLIE
+           PERFORM 7590-FECHAR-ARQ-RELATO
+           PERFORM 7690-FECHAR-ARQ-DIST.
+
+           MOVE  "Fim processo, tecle <Enter>"
                                        TO  W-MSGERRO
-                   PERFORM 8500-MOSTRA-AVISO
-               END-IF
-               PERFORM UNTIL FS-FIM  OR
-                             W-VOLTAR EQUAL "S"
-                  INITIALIZE W-REG-ARQ-RELATO
-                  MOVE CLIE-CODIGO
-                                        TO W-RELAT-CLIE-COD
-                  MOVE CLIE-RAZAO-SOCIAL
-                                        TO W-RELAT-CLIE-RAZAO
-                  MOVE CLIE-CODIGO      TO DIST-CLIE-CODIGO
-                  MOVE CLIE-CNPJ        TO DIST-CLIE-CNPJ
-                  MOVE CLIE-RAZAO-SOCIAL
-                                          TO DIST-CLIE-RAZAO-SOCIAL
-                  MOVE CLIE-LATITUDE    TO DIST-CLIE-LATITUDE
-                  MOVE CLIE-LONGITUDE   TO DIST-CLIE-LONGITUDE
-                  PERFORM 1100-ENCONTRAR-VENDEDOR
-                  PERFORM 4300-GRAVAR-REGISTRO
-                  PERFORM 7153-LER-PROX-ARQ-CLIE
-               END-PERFORM
-               PERFORM 7190-FECHAR-ARQ-CLIE
-               PERFORM 7290-FECHAR-ARQ-VEND
-               PERFORM 7590-FECHAR-ARQ-RELATO
-               PERFORM 7690-FECHAR-ARQ-DIST
-               IF   W-VOLTAR EQUAL "N"
-                    IF  W-GRAVADO  EQUAL "S"
-                        MOVE  "Relatorio gerado, tecle <Enter>"
-                                TO  W-MSGERRO
-                        PERFORM 8500-MOSTRA-AVISO
-                    END-IF
-               END-IF
-           END-IF.
+           PERFORM 8500-MOSTRA-AVISO.
 
       *----------------------------------------------------------------*
        1000-99-FIM.                   EXIT.
       *----------------------------------------------------------------*
 
       *----------------------------------------------------------------*
-       1100-ENCONTRAR-VENDEDOR.
+       1100-REALIZAR-DIST.
       *----------------------------------------------------------------*
 
-           MOVE "N"                    TO W-REG-ENCONTRADO
+           MOVE REG-ARQ-CLIENTE        TO REG-DIST-CLIENTE
+           MOVE CLIE-CODIGO            TO W-RELAT-CLIE-COD
+           MOVE CLIE-RAZAO-SOCIAL      TO W-RELAT-CLIE-RAZAO
 
-           MOVE 0                      TO VEND-CODIGO
-           PERFORM 7271-START-ARQ-VEND-ASC
+           PERFORM 1110-ENCONTRAR-VENDEDOR
+           IF  W-VOLTAR                EQUAL "N"
+               PERFORM 4300-GRAVAR-REGISTRO
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+               ELSE
+                   PERFORM 7153-LER-PROX-ARQ-CLIE
+                   IF  NOT FS-OK AND NOT FS-FIM
+                       MOVE "S"        TO W-VOLTAR
+                  END-IF
+               END-IF
+           END-IF.
 
-           PERFORM 7253-LER-PROX-ARQ-VEND
-           IF  FS-FIM
-               MOVE "S"         TO W-VOLTAR
-               MOVE  "Arquivo Vendedores vazio, tecle <Enter>"
-                                   TO  W-MSGERRO
-               PERFORM 8500-MOSTRA-AVISO
+      *----------------------------------------------------------------*
+       1100-99-FIM.                   EXIT.
+      *----------------------------------------------------------------*
+
+      *----------------------------------------------------------------*
+       1110-ENCONTRAR-VENDEDOR.
+      *----------------------------------------------------------------*
+
+           MOVE 9999999999,99999999 TO W-DIST-VEND-ANTERIOR
+
+           PERFORM 7211-ABRIR-INPUT-ARQ-VEND
+           IF  NOT FS-OK
+               MOVE "S"                TO W-VOLTAR
+           ELSE
+               PERFORM 7253-LER-PROX-ARQ-VEND
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+               END-IF
            END-IF
-           PERFORM UNTIL FS-FIM  OR
-                         W-VOLTAR = "S"
+
+           PERFORM UNTIL FS-FIM OR  W-VOLTAR EQUAL "S"
                PERFORM 5100-CALCULAR-DISTANCIA
+
                IF  W-DIST-VEND-ANTERIOR GREATER
                    W-DIST-VEND-ATUAL
-                   MOVE "S"            TO W-REG-ENCONTRADO
+
+                   MOVE REG-ARQ-VENDEDOR
+                                       TO REG-DIST-VENDEDOR
                    MOVE VEND-CODIGO    TO W-RELAT-VEND-COD
                    MOVE VEND-RAZAO-SOCIAL
                                        TO W-RELAT-VEND-RAZAO
-                   MOVE VEND-CODIGO    TO DIST-VEND-CODIGO
-                   MOVE VEND-CPF       TO DIST-VEND-CPF
-                   MOVE VEND-RAZAO-SOCIAL
-                                       TO DIST-VEND-RAZAO-SOCIAL
-                   MOVE VEND-LATITUDE  TO DIST-VEND-LATITUDE
-                   MOVE VEND-LONGITUDE TO DIST-VEND-LONGITUDE
                    MOVE W-DIST-VEND-ATUAL
                                        TO W-DISTANCIA
+                                          DIST-DISTANCIA
                    MOVE W-DIST-VEND-ATUAL
                                        TO W-DIST-VEND-ANTERIOR
                END-IF
+
                PERFORM 7253-LER-PROX-ARQ-VEND
-           END-PERFORM.
+               IF  NOT FS-OK AND  NOT FS-FIM
+                   MOVE "S"            TO W-VOLTAR
+               END-IF
+
+           END-PERFORM
+
+           PERFORM 7290-FECHAR-ARQ-VEND.
 
       *----------------------------------------------------------------*
        1000-99-FIM.                   EXIT.
@@ -236,44 +244,63 @@
       ******************************************************************
       * ROTINAS AUXILIARES
       ******************************************************************
-
       *----------------------------------------------------------------*
        2100-ABRIR-ARQUIVOS.
       *----------------------------------------------------------------*
-
-           PERFORM 7111-ABRIR-INPUT-ARQ-CLIE
-           IF  NOT FS-OK
-               PERFORM 7190-FECHAR-ARQ-CLIE
-               MOVE "S"                TO W-VOLTAR
-           END-IF
-
-           IF  W-VOLTAR     EQUAL "N"
-               PERFORM 7211-ABRIR-INPUT-ARQ-VEND
-               IF   NOT FS-OK
-                    PERFORM 7190-FECHAR-ARQ-CLIE
-                    PERFORM 7290-FECHAR-ARQ-VEND
-                    MOVE "S"           TO W-VOLTAR
+      * Validar arquivo de clientes
+           IF  W-VOLTAR                EQUAL "N"
+               PERFORM 7111-ABRIR-INPUT-ARQ-CLIE
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+                   IF  NOT FS-ARQ-NAO-ENCONTRADO
+                       PERFORM 7190-FECHAR-ARQ-CLIE
+                   END-IF
+               ELSE
+                   PERFORM 7153-LER-PROX-ARQ-CLIE
+                   IF  FS-FIM
+                       MOVE "S"            TO W-VOLTAR
+                       MOVE  "Arquivo clientes vazio, Tecle <Enter>"
+                                           TO  W-MSGERRO
+                       PERFORM 8500-MOSTRA-AVISO
+                   END-IF
+                   PERFORM 7190-FECHAR-ARQ-CLIE
                END-IF
            END-IF
 
-           IF  W-VOLTAR     EQUAL "N"
+      * Validar arquivo de vendedores
+           IF  W-VOLTAR    EQUAL "N"
+               PERFORM 7211-ABRIR-INPUT-ARQ-VEND
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+                   IF  NOT FS-ARQ-NAO-ENCONTRADO
+                       PERFORM 7290-FECHAR-ARQ-VEND
+                   END-IF
+               ELSE
+                   PERFORM 7253-LER-PROX-ARQ-VEND
+                   IF  FS-FIM
+                       MOVE "S"        TO W-VOLTAR
+                       MOVE  "Arquivo clientes vazio, Tecle <Enter>"
+                                       TO  W-MSGERRO
+                       PERFORM 8500-MOSTRA-AVISO
+                   END-IF
+                   PERFORM 7290-FECHAR-ARQ-VEND
+               END-IF
+           END-IF
+
+           IF  W-VOLTAR    EQUAL "N"
                PERFORM 7510-ABRIR-ARQ-RELATO
                IF  NOT FS-OK
-                   PERFORM 7190-FECHAR-ARQ-CLIE
-                   PERFORM 7290-FECHAR-ARQ-VEND
+                   MOVE "S"            TO W-VOLTAR
                    PERFORM 7590-FECHAR-ARQ-RELATO
-                   MOVE "S"       TO W-VOLTAR
                END-IF
            END-IF
 
-           IF  W-VOLTAR     EQUAL "N"
+           IF  W-VOLTAR    EQUAL "N"
                PERFORM 7610-ABRIR-ARQ-DIST
                IF  NOT FS-OK
-                   PERFORM 7190-FECHAR-ARQ-CLIE
-                   PERFORM 7290-FECHAR-ARQ-VEND
+                   MOVE "S"            TO W-VOLTAR
                    PERFORM 7590-FECHAR-ARQ-RELATO
                    PERFORM 7690-FECHAR-ARQ-DIST
-                   MOVE "S"       TO W-VOLTAR
                END-IF
            END-IF.
 
@@ -292,8 +319,14 @@
                MOVE "S"                TO W-GRAVADO
            END-IF
 
-           MOVE  W-REG-ARQ-RELATO  TO REG-ARQ-RELATO
+           MOVE  W-REG-ARQ-RELATO      TO REG-ARQ-RELATO
            PERFORM 7560-GRAVAR-ARQ-RELATO.
+           IF  NOT FS-OK
+               MOVE "S"                TO W-VOLTAR
+           ELSE
+               PERFORM 7660-GRAVAR-ARQ-DIST
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR.
 
       *----------------------------------------------------------------*
        4300-99-FIM.                    EXIT.

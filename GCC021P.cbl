@@ -25,8 +25,14 @@
       *----------------------------------------------------------------*
        FILE-CONTROL.
 
+      * Arquivo Distribuicao
+       COPY ".\copybooks\GCC031FC".
+
       * Arquivo Clientes
        COPY ".\copybooks\GCC011FC".
+
+      * Arquivo Vendedores
+       COPY ".\copybooks\GCC012FC".
 
        SELECT ARQ-SORT ASSIGN TO "CLIE-SORT.TMP"
            FILE STATUS     IS  WS-RESULTADO-ACESSO.
@@ -39,16 +45,33 @@
       *================================================================*
        FILE                            SECTION.
 
+      * Arquivo disistribuicao
+       COPY ".\copybooks\GCC031FD".
+
       * Arquivo Clientes
        COPY ".\copybooks\GCC011FD".
 
+      * Arquivo Vendedores
+       COPY ".\copybooks\GCC012FD".
+
+
        SD  ARQ-SORT.
        01  REG-SORT.
-           05  SORT-CODIGO             PIC  9(007).
-           05  SORT-CNPJ               PIC  9(014).
-           05  SORT-RAZAO-SOCIAL       PIC  X(040).
-           05  SORT-LATITUDE           PIC S9(003)V9(008).
-           05  SORT-LONGITUDE          PIC S9(003)V9(008).
+           05 REG-SORT-CLIENTE.
+               10 SORT-CLIE-CODIGO     PIC  9(007).
+               10 SORT-CLIE-CNPJ       PIC  9(014).
+               10 SORT-CLIE-RAZAO-SOCIAL
+                                       PIC  X(040).
+               10 SORT-CLIE-LATITUDE   PIC S9(003)V9(008).
+               10 SORT-CLIE-LONGITUDE  PIC S9(003)V9(008).
+           05 REG-SORT-VENDEDOR.
+               10 SORT-VEND-CODIGO     PIC  9(007).
+               10 SORT-VEND-CPF        PIC  9(011).
+               10 SORT-VEND-RAZAO-SOCIAL
+                                       PIC  X(040).
+               10 SORT-VEND-LATITUDE   PIC S9(003)V9(008).
+               10 SORT-VEND-LONGITUDE  PIC S9(003)V9(008).
+           05  SORT-DISTANCIA          PIC  9(006).
 
       * Arquivo Relatorio
        COPY ".\copybooks\GCC021FD".
@@ -56,6 +79,9 @@
       *----------------------------------------------------------------*
        WORKING-STORAGE                 SECTION.
       *----------------------------------------------------------------*
+       77 W-COD-VEND               PIC 9(07) VALUE ZEROS.
+       77 W-SEL-REGISTRO           PIC X(01) VALUE "N".
+
       * Campos uso comum
        COPY ".\copybooks\GCC000W".
 
@@ -85,29 +111,33 @@
            05 W-CAB-01-PAGINA      PIC ZZZ9.
 
        01  W-CAB-02.
-           05 FILLER               PIC X(04).
+           05 FILLER               PIC X(01).
            05 FILLER               PIC X(06) VALUE "Codigo".
-           05 FILLER               PIC X(03).
+           05 FILLER               PIC X(01).
            05 FILLER               PIC X(18) VALUE "CNPJ".
-           05 FILLER               PIC X(03).
+           05 FILLER               PIC X(01).
            05 FILLER               PIC X(40) VALUE "Razao Social".
-           05 FILLER               PIC X(03).
-           05 FILLER               PIC X(12) VALUE "Latitude".
-           05 FILLER               PIC X(04).
-           05 FILLER               PIC X(12) VALUE "Longitude".
+           05 FILLER               PIC X(11).
+           05 FILLER               PIC X(09) VALUE "Distancia".
+           05 FILLER               PIC X(01).
+           05 FILLER               PIC X(08) VALUE "Vendedor".
+           05 FILLER               PIC X(01).
+           05 FILLER               PIC X(30) VALUE "Razao Social".
 
        01  W-DET-01.
-           05 FILLER               PIC X(03).
+           05 FILLER               PIC X(01).
            05 W-DET-01-CODIGO      PIC ZZZZZZ9.
-           05 FILLER               PIC X(03).
+           05 FILLER               PIC X(01).
            05 W-DET-01-CNPJ        PIC 99.999.999/9999.99.
-           05 FILLER               PIC X(03).
+           05 FILLER               PIC X(01).
            05 W-DET-01-RAZAO-SOCIAL
                                    PIC X(40).
-           05 FILLER               PIC X(03).
-           05 W-DET-01-LATITUDE    PIC -ZZ9,99999999.
-           05 FILLER               PIC X(003).
-           05 W-DET-01-LONGITUDE   PIC -ZZ9,99999999.
+           05 FILLER               PIC X(01).
+           05 W-DET-01-DISTANCIA   PIC ZZZZZZZZZ9,99999999.
+           05 FILLER               PIC X(01).
+           05 W-DET-01-VEND-COD    PIC ZZZZZZ9.
+           05 FILLER               PIC X(02).
+           05 W-DET-01-VEND-RAZAO  PIC X(30).
 
        01  W-ROD-01.
            05 FILLER               PIC X(10).
@@ -178,11 +208,64 @@
        1000-INICIALIZA                 SECTION.
       *----------------------------------------------------------------*
 
-           PERFORM 7111-ABRIR-INPUT-ARQ-CLIE
-           IF  NOT FS-OK
-               MOVE "S"                TO W-VOLTAR
-               IF  NOT FS-ARQ-NAO-ENCONTRADO
+      * Validar arquivo de clientes
+           IF  W-VOLTAR                EQUAL "N"
+               PERFORM 7111-ABRIR-INPUT-ARQ-CLIE
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+                   IF  NOT FS-ARQ-NAO-ENCONTRADO
+                       PERFORM 7190-FECHAR-ARQ-CLIE
+                   END-IF
+               ELSE
+                   PERFORM 7153-LER-PROX-ARQ-CLIE
+                   IF  FS-FIM
+                       MOVE "S"            TO W-VOLTAR
+                       MOVE  "Arquivo clientes vazio, Tecle <Enter>"
+                                           TO  W-MSGERRO
+                       PERFORM 8500-MOSTRA-AVISO
+                   END-IF
                    PERFORM 7190-FECHAR-ARQ-CLIE
+               END-IF
+           END-IF
+
+      * Validar arquivo de vendedores
+           IF  W-VOLTAR    EQUAL "N"
+               PERFORM 7211-ABRIR-INPUT-ARQ-VEND
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+                   IF  NOT FS-ARQ-NAO-ENCONTRADO
+                       PERFORM 7290-FECHAR-ARQ-VEND
+                   END-IF
+               ELSE
+                   PERFORM 7253-LER-PROX-ARQ-VEND
+                   IF  FS-FIM
+                       MOVE "S"        TO W-VOLTAR
+                       MOVE  "Arquivo clientes vazio, Tecle <Enter>"
+                                       TO  W-MSGERRO
+                       PERFORM 8500-MOSTRA-AVISO
+                   END-IF
+                   PERFORM 7290-FECHAR-ARQ-VEND
+               END-IF
+           END-IF
+
+
+      * Validar arquivo de distribuicao
+           IF  W-VOLTAR    EQUAL "N"
+               PERFORM 7611-ABRIR-ARQ-DIST-INPUT
+               IF  NOT FS-OK
+                   MOVE "S"            TO W-VOLTAR
+                   IF  NOT FS-ARQ-NAO-ENCONTRADO
+                       PERFORM 7690-FECHAR-ARQ-dist
+                   END-IF
+               ELSE
+                   PERFORM 7653-LER-PROX-ARQ-DIST
+                   IF  FS-FIM
+                       MOVE "S"        TO W-VOLTAR
+                       MOVE  "Arquivo distribuicao vazio, Tecle <Enter>"
+                                       TO  W-MSGERRO
+                       PERFORM 8500-MOSTRA-AVISO
+                   END-IF
+                   PERFORM 7690-FECHAR-ARQ-DIST
                END-IF
            END-IF.
 
@@ -201,21 +284,25 @@
 
            IF  W-ORDENACAO-ASC
                IF  W-CLASSIFICACAO-CLIENTE
-                   SORT ARQ-SORT    ON ASCENDING   KEY SORT-CODIGO
+                   SORT ARQ-SORT ON
+                   ASCENDING   KEY SORT-CLIE-CODIGO
                    INPUT PROCEDURE  IS 2100-INPUT-SORT
                    OUTPUT PROCEDURE IS 2200-OUTPUT-SORT
                ELSE
-                   SORT ARQ-SORT    ON ASCENDING   KEY SORT-RAZAO-SOCIAL
+                   SORT ARQ-SORT ON
+                   ASCENDING   KEY SORT-CLIE-RAZAO-SOCIAL
                    INPUT PROCEDURE  IS 2100-INPUT-SORT
                    OUTPUT PROCEDURE IS 2200-OUTPUT-SORT
                END-IF
            ELSE
                IF  W-CLASSIFICACAO-CLIENTE
-                   SORT ARQ-SORT    ON DESCENDING  KEY SORT-CODIGO
+                   SORT ARQ-SORT ON
+                   DESCENDING  KEY SORT-CLIE-CODIGO
                    INPUT PROCEDURE  IS 2100-INPUT-SORT
                    OUTPUT PROCEDURE IS 2200-OUTPUT-SORT
                ELSE
-                   SORT ARQ-SORT    ON DESCENDING  KEY SORT-RAZAO-SOCIAL
+                   SORT ARQ-SORT ON
+                   DESCENDING KEY SORT-CLIE-RAZAO-SOCIAL
                    INPUT PROCEDURE  IS 2100-INPUT-SORT
                    OUTPUT PROCEDURE IS 2200-OUTPUT-SORT
                END-IF
@@ -229,13 +316,15 @@
        2100-INPUT-SORT                 SECTION.
       *----------------------------------------------------------------*
 
-           PERFORM 7153-LER-PROX-ARQ-CLIE
+           PERFORM 7611-ABRIR-ARQ-DIST-INPUT
+
+           PERFORM 7653-LER-PROX-ARQ-DIST
 
            PERFORM UNTIL NOT FS-OK
                PERFORM 2110-MOVER-CAMPOS-SORT
            END-PERFORM
 
-           PERFORM 7190-FECHAR-ARQ-CLIE.
+           PERFORM 7690-FECHAR-ARQ-DIST.
 
       *----------------------------------------------------------------*
        2100-EXIT.                      EXIT.
@@ -244,22 +333,34 @@
       *----------------------------------------------------------------*
        2110-MOVER-CAMPOS-SORT          SECTION.
       *----------------------------------------------------------------*
+           MOVE "N"                    TO W-SEL-REGISTRO
 
            IF  W-CODIGO                EQUAL ZEROS
                IF  W-RAZAO-SOCIAL      EQUAL SPACES
-                   RELEASE REG-SORT    FROM  REG-ARQ-CLIENTE
+                   MOVE "S"            TO W-SEL-REGISTRO
                ELSE
-                   IF  CLIE-RAZAO-SOCIAL EQUAL W-RAZAO-SOCIAL
-                       RELEASE REG-SORT  FROM  REG-ARQ-CLIENTE
+                   IF  CLIE-RAZAO-SOCIAL
+                                       EQUAL W-RAZAO-SOCIAL
+                       MOVE "S"        TO W-SEL-REGISTRO
                    END-IF
                END-IF
            ELSE
-               IF  CLIE-CODIGO         EQUAL W-CODIGO
-                   RELEASE REG-SORT    FROM  REG-ARQ-CLIENTE
+               IF  DIST-CLIE-CODIGO    EQUAL W-CODIGO
+                   MOVE "S"            TO W-SEL-REGISTRO
                END-IF
            END-IF
 
-           PERFORM 7153-LER-PROX-ARQ-CLIE.
+           IF  W-COD-VEND              NOT EQUAL ZEROS
+               IF  DIST-VEND-CODIGO    NOT EQUAL W-COD-VEND
+                   MOVE "N"            TO W-SEL-REGISTRO
+               END-IF
+           END-IF
+
+           IF  W-SEL-REGISTRO          EQUAL "S"
+               RELEASE REG-SORT FROM REG-ARQ-DIST
+           END-IF
+
+           PERFORM 7653-LER-PROX-ARQ-DIST.
 
       *----------------------------------------------------------------*
        2110-EXIT.                      EXIT.
@@ -286,7 +387,6 @@
                    PERFORM UNTIL NOT FS-OK
                        PERFORM 2210-GERA-RELATORIO THRU 2210-99-FIM
                    END-PERFORM
-                   PERFORM 4320-GRAVAR-RODAPE
                    PERFORM 7590-FECHAR-ARQ-RELATO
 
                    IF  W-PAGINAS       NOT EQUAL ZEROS
@@ -313,11 +413,14 @@
            ADD  1                      TO W-CONTADOR
            ADD  1                      TO W-LINHAS
 
-           MOVE  SORT-CODIGO           TO W-DET-01-CODIGO
-           MOVE  SORT-CNPJ             TO W-DET-01-CNPJ
-           MOVE  SORT-RAZAO-SOCIAL     TO W-DET-01-RAZAO-SOCIAL
-           MOVE  SORT-LATITUDE         TO W-DET-01-LATITUDE
-           MOVE  SORT-LONGITUDE        TO W-DET-01-LONGITUDE
+           MOVE  SORT-CLIE-CODIGO      TO W-DET-01-CODIGO
+           MOVE  SORT-CLIE-CNPJ        TO W-DET-01-CNPJ
+           MOVE  SORT-CLIE-RAZAO-SOCIAL
+                                       TO W-DET-01-RAZAO-SOCIAL
+           MOVE  SORT-DISTANCIA        TO W-DET-01-DISTANCIA
+           MOVE  SORT-VEND-CODIGO      TO W-DET-01-VEND-COD
+           MOVE  SORT-VEND-RAZAO-SOCIAL
+                                       TO W-DET-01-VEND-RAZAO
 
            WRITE REG-ARQ-RELATO  FROM W-DET-01 AFTER 1
 
@@ -341,6 +444,7 @@
 
            MOVE SPACES                 TO  W-STATUS
            MOVE "Codigo = 0 (Todos)"   TO  S-CODIGO-DESC
+                                           S-COD-VEND-DESC
            MOVE "A - Ascendente D - Decrescente"
                                        TO  S-ORDENACAO-DESC
            MOVE "C - Codigo R - Razao Social"
@@ -372,6 +476,7 @@
            END-IF
            DISPLAY S-TELA-ACC-ARQ
 
+      * Validar Cliente
            MOVE  "N"                   TO  W-REG-ENCONTRADO
            PERFORM UNTIL W-REG-ENCONTRADO EQUAL "S"
                MOVE "Codigo = 0 (Todos)"
@@ -386,6 +491,7 @@
                    DISPLAY S-TELA-ACC-ARQ
                    ACCEPT S-RAZAO-SOCIAL
                ELSE
+                   MOVE W-CODIGO  TO VEND-CODIGO
                    PERFORM 7151-LER-ARQ-CLIE-CODIGO
                    IF  W-REG-ENCONTRADO EQUAL  "S"
                        MOVE SPACES     TO  S-CODIGO-DESC
@@ -394,6 +500,34 @@
                        DISPLAY S-TELA-ACC-ARQ
                    ELSE
                        MOVE  "Cliente invalido, tecle <Enter>"
+                                       TO  W-MSGERRO
+                       PERFORM 8500-MOSTRA-AVISO
+                   END-IF
+               END-IF
+           END-PERFORM.
+
+      * Validar Vendedor
+           MOVE  "N"                   TO  W-REG-ENCONTRADO
+           PERFORM UNTIL W-REG-ENCONTRADO EQUAL "S"
+               MOVE "Codigo = 0 (Todos)"
+                                       TO  S-COD-VEND-DESC
+               DISPLAY S-TELA-ACC-ARQ
+               ACCEPT S-COD-VEND
+               MOVE W-COD-VEND         TO VEND-CODIGO
+               IF   W-COD-VEND          EQUAL ZEROS
+                   MOVE "S"            TO W-REG-ENCONTRADO
+                   MOVE "Todos os vendedores"
+                                       TO  S-COD-VEND-DESC
+                   DISPLAY S-TELA-ACC-ARQ
+               ELSE
+                   MOVE W-COD-VEND  TO VEND-CODIGO
+                   PERFORM 7251-LER-ARQ-VEND-CODIGO
+                   IF  W-REG-ENCONTRADO EQUAL  "S"
+                       MOVE VEND-RAZAO-SOCIAL
+                                       TO  S-COD-VEND-DESC
+                       DISPLAY S-TELA-ACC-ARQ
+                   ELSE
+                       MOVE  "Vendedor invalido, tecle <Enter>"
                                        TO  W-MSGERRO
                        PERFORM 8500-MOSTRA-AVISO
                    END-IF
@@ -443,7 +577,11 @@
       *
       * Rotinas arquivo clientes
        COPY ".\copybooks\GCC011R".
+      * Rotinas arquivo vendedor
+       COPY ".\copybooks\GCC012R".
+      * Rotinas arquivo distribuicao
+       COPY ".\copybooks\GCC031R".
       * Rotinas arquivo relatorio e importacao
-       COPY ".\copybooks\GCC022R".
+       COPY ".\copybooks\GCC021R".
       * Rotinas tela principal
        COPY ".\copybooks\GCC000R".

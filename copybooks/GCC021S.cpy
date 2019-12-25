@@ -47,4 +47,11 @@
                    FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
                                        LINE 17 COL 28
                                        PIC X(40) TO W-RAZAO-SOCIAL.
-.
+               10  VALUE  "Cod. Vendedor..: "
+                                       LINE 19 COL 10.
+              10  S-COD-VEND
+                   FOREGROUND-COLOR 0 BACKGROUND-COLOR 7
+                   BLANK WHEN ZEROS    LINE 19 COL 28
+                                       PIC 9(07) TO W-COD-VEND.
+               10  S-COD-VEND-DESC     PIC X(40) TO S-COD-VEND-DESC
+                                       LINE 19 COL 37.

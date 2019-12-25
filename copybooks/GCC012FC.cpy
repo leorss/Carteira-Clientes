@@ -9,7 +9,6 @@
                ACCESS MODE             IS DYNAMIC
                RECORD KEY              IS VEND-CODIGO
                ALTERNATE KEY           IS VEND-CPF
-               ALTERNATE KEY           IS VEND-RAZAO-SOCIAL
                                        WITH DUPLICATES
                LOCK MODE               IS MANUAL
                FILE STATUS             IS WS-RESULTADO-ACESSO.

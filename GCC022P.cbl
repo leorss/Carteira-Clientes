@@ -126,7 +126,7 @@
       * Copybook tela principal
        COPY ".\copybooks\GCC000S".
       * Copybook tela relatorio
-       COPY ".\copybooks\GCC021S".
+       COPY ".\copybooks\GCC022S".
       *
        COPY screenio.
 
@@ -286,7 +286,6 @@
                    PERFORM UNTIL NOT FS-OK
                        PERFORM 2210-GERA-RELATORIO THRU 2210-99-FIM
                    END-PERFORM
-                   PERFORM 4320-GRAVAR-RODAPE
                    PERFORM 7590-FECHAR-ARQ-RELATO
 
                    IF  W-PAGINAS       NOT EQUAL ZEROS
