@@ -26,6 +26,12 @@
            88 FS-ERRO-LAYOUT           VALUE "39".
            88 FS-CANCELA               VALUE "99".
 
+
+       01 W-MSG-FILE-STATUS.
+           05 W-MSG-FILE-STATUS-1      PIC X(80) VALUES SPACES.
+           05 W-MSG-FILE-STATUS-2      PIC X(80) VALUES SPACES.
+
+
       *----------------------------------------------------------------*
        01  W-SCREEN.
       *----------------------------------------------------------------*
@@ -36,6 +42,8 @@
            05  W-COR-FRENTE            PIC 9(01) VALUE 6.
            05  W-STATUS                PIC X(70).
            05  W-MSGERRO               PIC X(80).
+           05  W-MSGERRO-1             PIC X(80).
+           05  W-MSGERRO-2             PIC X(80).
            05  W-NUML                  PIC 9(03).
            05  W-NUMC                  PIC 9(03).
            05  W-ERRO                  PIC X(01).

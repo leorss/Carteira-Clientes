@@ -188,12 +188,11 @@
                ACCEPT S-NOME-ARQ
                IF COB-CRT-STATUS NOT EQUAL COB-SCR-ESC
                    PERFORM 4100-ACC-FILTROS
-               END-IF
-
-               IF COB-CRT-STATUS NOT EQUAL COB-SCR-ESC
-                   PERFORM 1000-INICIALIZA
-                   IF   W-VOLTAR EQUAL "N"
-                        PERFORM 2000-PROCESSAR
+                   IF  W-VOLTAR EQUAL "N"
+                       PERFORM 1000-INICIALIZA
+                       IF   W-VOLTAR EQUAL "N"
+                            PERFORM 2000-PROCESSAR
+                       END-IF
                    END-IF
                END-IF
 
@@ -247,8 +246,6 @@
                    PERFORM 7290-FECHAR-ARQ-VEND
                END-IF
            END-IF
-
-
       * Validar arquivo de distribuicao
            IF  W-VOLTAR    EQUAL "N"
                PERFORM 7611-ABRIR-ARQ-DIST-INPUT

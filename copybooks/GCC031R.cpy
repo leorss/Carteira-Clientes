@@ -13,6 +13,7 @@
            IF  NOT FS-OK
                STRING "Erro ao abrir ARQ-DIST. FS: "
                       WS-RESULTADO-ACESSO INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -28,6 +29,7 @@
            IF  NOT FS-OK
                STRING "Erro ao abrir ARQ-DIST. FS: "
                       WS-RESULTADO-ACESSO INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -44,6 +46,7 @@
                IF  NOT FS-FIM
                    STRING "Erro leitura ARQ-DIST. FS: "
                           WS-RESULTADO-ACESSO  INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -77,6 +80,7 @@
                IF  NOT FS-FIM
                    STRING "Erro leitura ARQ-DIST. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.

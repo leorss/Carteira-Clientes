@@ -19,7 +19,7 @@
                   HIGHLIGHT FOREGROUND-COLOR W-COR-FRENTE
                             BACKGROUND-COLOR W-COR-FUNDO.
            05 S-STATUS.
-               10 LINE 29 COLUMN 2 ERASE EOL PIC X(70)
+               10 LINE 28 COLUMN 2 ERASE EOL PIC X(70)
                   FROM W-STATUS HIGHLIGHT
                             FOREGROUND-COLOR W-COR-FRENTE
                             BACKGROUND-COLOR W-COR-FUNDO.
@@ -28,15 +28,27 @@
        01 S-ERRO.
       *----------------------------------------------------------------*
            05 FILLER FOREGROUND-COLOR 4 BACKGROUND-COLOR 1 HIGHLIGHT.
-               10 LINE 29   COLUMN 2 PIC X(80) FROM W-MSGERRO BELL.
+               10 LINE 28   COLUMN 2 PIC X(80) FROM W-MSGERRO BELL.
                10 COLUMN PLUS 2 TO W-ERRO.
+
+
+      *----------------------------------------------------------------*
+       01 S-ERRO-2.
+      *----------------------------------------------------------------*
+
+           05 FILLER.
+               10 LINE 29   COLUMN 2 PIC X(80) FROM W-MSGERRO-1 BELL.
+
+           05 FILLER.
+               10 LINE 30   COLUMN 2 PIC X(80) FROM W-MSGERRO-2 BELL.
+
 
       *----------------------------------------------------------------*
        01 S-OPCAO.
       *----------------------------------------------------------------*
            05 FILLER FOREGROUND-COLOR W-COR-FRENTE
                      BACKGROUND-COLOR W-COR-FUNDO HIGHLIGHT.
-               10 LINE 29   COLUMN 2 PIC X(80) FROM W-STATUS BELL.
+               10 LINE 28   COLUMN 2 PIC X(80) FROM W-STATUS BELL.
                10 COLUMN PLUS 2 TO W-OPCAO.
 
 
@@ -52,4 +64,4 @@
            05  LINE 14 COL 10 VALUE "Executar".
            05  LINE 15 COL 10 VALUE "  <F5> Executar Distribuicao de Cli
       -                             "entes".
-           05 LINE 29 COL 1  USING W-OPCAO AUTO.
+           05 LINE 28 COL 1  USING W-OPCAO AUTO.

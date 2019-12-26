@@ -18,6 +18,7 @@
                ELSE
                    STRING "Erro ao abrir ARQ-CLIENTE. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -35,10 +36,12 @@
                IF  FS-ARQ-NAO-ENCONTRADO
                    STRING "Arquivo ARQ-CLIENTE nao existe. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
                ELSE
                    STRING "Erro ao abrir ARQ-CLIE. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -57,6 +60,7 @@
            IF  NOT FS-OK
                STRING "Error inserir registro. FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            ELSE
                MOVE "Registro inserido com sucesso!"
@@ -80,6 +84,7 @@
            IF NOT FS-OK
                STRING "Erro alterar registro. FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            ELSE
                MOVE "Registro alterado com sucesso!"
@@ -103,6 +108,7 @@
            IF NOT FS-OK
                STRING "Error excluir registro. FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            ELSE
                MOVE "Registro excluido com sucesso!"
@@ -158,6 +164,7 @@
                IF  NOT FS-FIM
                    STRING "Erro leitura ARQ-CLIENTE. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -174,6 +181,7 @@
                IF  NOT FS-FIM
                    STRING "Erro leitura ARQ-CLIENTE. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -191,6 +199,7 @@
                IF  NOT FS-FIM
                    STRING "Erro leitura ARQ-CLIENTE. FS: "
                           WS-RESULTADO-ACESSO INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -207,6 +216,7 @@
            IF NOT FS-OK
                STRING "Erro gravar ARQ-CLIE. FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -222,6 +232,7 @@
            IF  NOT FS-OK
                STRING "Erro start ARQ-CLIENTE. FS: "
                       WS-RESULTADO-ACESSO INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -252,6 +263,7 @@
            IF NOT FS-OK
                STRING "Erro fechar ARQ-CLIE. FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 

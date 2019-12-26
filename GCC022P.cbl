@@ -146,7 +146,8 @@
 
            PERFORM UNTIL W-FIM EQUAL "S"
 
-               MOVE "Relatorio Cliente"    TO W-MODULO
+               MOVE "Relatorio Vendedores"
+                                           TO W-MODULO
                MOVE WID-ARQ-REL-VEND       TO W-ARQ-RELATO
                                               S-NOME-ARQ
 
@@ -157,13 +158,14 @@
 
                ACCEPT S-NOME-ARQ
                IF COB-CRT-STATUS NOT EQUAL COB-SCR-ESC
-                   PERFORM 4100-ACC-FILTROS
-               END-IF
-
-               IF COB-CRT-STATUS NOT EQUAL COB-SCR-ESC
-                   PERFORM 1000-INICIALIZA
                    IF   W-VOLTAR EQUAL "N"
-                        PERFORM 2000-PROCESSAR
+                       PERFORM 4100-ACC-FILTROS
+                       IF  W-VOLTAR EQUAL "N"
+                           PERFORM 1000-INICIALIZA
+                           IF   W-VOLTAR EQUAL "N"
+                                PERFORM 2000-PROCESSAR
+                           END-IF
+                      END-IF
                    END-IF
                END-IF
 
@@ -177,6 +179,7 @@
       *----------------------------------------------------------------*
        1000-INICIALIZA                 SECTION.
       *----------------------------------------------------------------*
+           MOVE "N"                    TO      W-VOLTAR
 
            PERFORM 7211-ABRIR-INPUT-ARQ-VEND
            IF  NOT FS-OK

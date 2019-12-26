@@ -12,6 +12,7 @@
            IF  NOT FS-OK
                STRING "Erro ao abrir ARQ-RELATO. FS: "
                       WS-RESULTADO-ACESSO INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -42,6 +43,7 @@
            IF  NOT FS-OK
                STRING "Erro fechar ARQ-RELATO . FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -72,6 +74,7 @@
            IF  NOT FS-OK
                STRING "Erro ao abrir ARQ-IMPORTA. FS: "
                       WS-RESULTADO-ACESSO INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -88,6 +91,7 @@
                IF  NOT FS-FIM
                    STRING "Erro leitura ARQ-IMPORTA. FS: "
                           WS-RESULTADO-ACESSO  INTO W-MSGERRO
+                   PERFORM 9999-MOSTRA-ERRO-FS
                    PERFORM 8500-MOSTRA-AVISO
                END-IF
            END-IF.
@@ -104,6 +108,7 @@
            IF  NOT FS-OK
                STRING "Erro gravar ARQ-IMPORTA. FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
@@ -119,6 +124,7 @@
            IF  NOT FS-OK
                STRING "Erro fechar ARQ-IMPORTA . FS: "
                       WS-RESULTADO-ACESSO  INTO W-MSGERRO
+               PERFORM 9999-MOSTRA-ERRO-FS
                PERFORM 8500-MOSTRA-AVISO
            END-IF.
 
