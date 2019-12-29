@@ -31,39 +31,37 @@
 
 Executar o programa GCC000P (Menu Principal), presente na pasta bin do projeto. No menu principal, escolher uma das opções apresentadas.
 
-![Inicial](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20Inicial.jpg)
-
+<img src="./Imagens/Tela%20Inicial.jpg" alt="Tela Inicial" style="width:42px;height:42px;border:0;">
 
 ### 1.	Cadastros
 
 Na tela de cadastros, deverá ser escolhida uma das opções:
 
-![cadastro-cliente](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente.jpg)
-
+![cadastro-cliente](./Imagens/Tela%20cadastro%20cliente.jpg)
 
 ### Opção  <F1>  Incluir
 
 Será apresentada a seguinte tela:
 
-![cadastro-cliente-incluir](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20incluir.jpg)
+![cadastro-cliente-incluir](./Imagens/Tela%20cadastro%20cliente%20incluir.jpg)
 
 
 ### Opção <F2> Alterar
 
 Antes de realizar a alteração, aparecerá a seguinte tela:
 
-![cadastro-cliente-alterar](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20alterar.jpg)
+![cadastro-cliente-alterar](./Imagens/Tela%20cadastro%20cliente%20alterar.jpg)
 
 
 ### Opção  <F3> Excluir
 
- ![cadastro-cliente-excluir](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20excluir.jpg)
+ ![cadastro-cliente-excluir](./Imagens/Tela%20cadastro%20cliente%20excluir.jpg)
 
 
 ### Opção  <F4> Importar
 Escolher o arquivo de importação e pressionar <Enter>
 
- ![cadastro-cliente-importar](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20importar.jpg)
+ ![cadastro-cliente-importar](./Imagens/Tela%20cadastro%20cliente%20importar.jpg)
 
 
 ### 2.	Relatórios
@@ -78,7 +76,7 @@ Nessa tela é possível escolher:
 •	Razão Social
 •	Código do vendedor
 
-![relatorio-cliente](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20cliente.jpg)
+![relatorio-cliente](./Imagens/Tela%20relatorio%20cliente.jpg)
 
 O relatório de clientes é gerado no seguinte formato:
  
@@ -92,13 +90,13 @@ Nessa tela é possível escolher:
 •	Classificação
 •	Código do vendedor
 
-![relatorio-vendedor](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20vendedor.jpg)
+![relatorio-vendedor](./Imagens/Tela%20relatorio%20vendedor.jpg)
  
 O relatório de clientes é gerado no seguinte formato:
  
-![relatorio-vendedor-resultado](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20vendedor%20resultado.jpg)
+![relatorio-vendedor-resultado](./Imagens/Tela%20relatorio%20vendedor%20resultado.jpg)
 
 ### 3.	Executar Distribuição de Clientes
 Nessa opção, é possível escolher o arquivo destino de importação. O resultado da execução é um arquivo no formato .csv. 
 
-![distribuicao-clientes](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20distribuicao%20clientes.jpg)
+![distribuicao-clientes](./Imagens/Tela%20distribuicao%20clientes.jpg)
