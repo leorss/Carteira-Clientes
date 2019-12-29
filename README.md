@@ -1,5 +1,4 @@
-# Carteira clientes vendedores novos
-
+# Distribuição da carteira de clientes para vendedores novos
 
 ### Requisitos :
 - Download da IDE [OpenCobol](https://launchpad.net/cobcide/+download)
@@ -7,6 +6,9 @@
 - Compilar os arquivos fontes através da IDE do OpenCobol.
 - Instruções de uso no arquivo "manual.docx" localizado no diretorio "documentos"".
 
+### Instruções de acesso :
+
+Executar o programa GCC000P (Menu Principal), presente na pasta bin do projeto. No menu principal, escolher uma das opções apresentadas.
 
 ### Mapa do sistema:
 
