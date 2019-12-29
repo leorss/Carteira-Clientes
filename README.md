@@ -6,9 +6,6 @@
 - Compilar os arquivos fontes através da IDE do OpenCobol.
 - Instruções de uso no arquivo "manual.docx" localizado no diretorio "documentos"".
 
-### Instruções de acesso :
-
-Executar o programa GCC000P (Menu Principal), presente na pasta bin do projeto. No menu principal, escolher uma das opções apresentadas.
 
 ### Mapa do sistema:
 
@@ -28,3 +25,80 @@ Executar o programa GCC000P (Menu Principal), presente na pasta bin do projeto. 
             1. GCC021P - Relatorio Cliente
             2. GCC022P - Relatorio Vendedor
         3. GCC031P - Executar Distribuição de Clientes
+
+
+### Instruções de acesso :
+
+Executar o programa GCC000P (Menu Principal), presente na pasta bin do projeto. No menu principal, escolher uma das opções apresentadas.
+
+![Inicial](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20Inicial.jpg)
+
+
+### 1.	Cadastros
+
+Na tela de cadastros, deverá ser escolhida uma das opções:
+
+![cadastro-cliente](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente.jpg)
+
+
+### Opção  <F1>  Incluir
+
+Será apresentada a seguinte tela:
+
+![cadastro-cliente-incluir](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20incluir.jpg)
+
+
+### Opção <F2> Alterar
+
+Antes de realizar a alteração, aparecerá a seguinte tela:
+
+![cadastro-cliente-alterar](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20alterar.jpg)
+
+
+### Opção  <F3> Excluir
+
+ ![cadastro-cliente-excluir](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20excluir.jpg)
+
+
+### Opção  <F4> Importar
+Escolher o arquivo de importação e pressionar <Enter>
+
+ ![cadastro-cliente-importar](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20cadastro%20cliente%20importar.jpg)
+
+
+### 2.	Relatórios
+
+### 1)	Relatório clientes:
+
+Nessa tela é possível escolher: 
+•	Arquivo destino 
+•	Ordenação 
+•	Classificação
+•	Código do cliente
+•	Razão Social
+•	Código do vendedor
+
+![relatorio-cliente](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20cliente.jpg)
+
+O relatório de clientes é gerado no seguinte formato:
+ 
+![relatorio-cliente-resultado](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20cliente%20resultado.jpg)
+
+### 2)	Relatório vendedor:
+
+Nessa tela é possível escolher: 
+•	Arquivo destino 
+•	Ordenação 
+•	Classificação
+•	Código do vendedor
+
+![relatorio-vendedor](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20vendedor.jpg)
+ 
+O relatório de clientes é gerado no seguinte formato:
+ 
+![relatorio-vendedor-resultado](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20relatorio%20vendedor%20resultado.jpg)
+
+### 3.	Executar Distribuição de Clientes
+Nessa opção, é possível escolher o arquivo destino de importação. O resultado da execução é um arquivo no formato .csv. 
+
+![distribuicao-clientes](https://github.com/leorss/carteira-clientes/blob/master/Imagens/Tela%20distribuicao%20clientes.jpg)
