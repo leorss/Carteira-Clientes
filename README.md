@@ -24,7 +24,7 @@
         2. Relatorios
             1. GCC021P - Relatorio Cliente
             2. GCC022P - Relatorio Vendedor
-        3. GCC031P - Executar Distribuição de Clientes
+        3. GCC030P - Executar Distribuição de Clientes
 
 
 ### Instruções de acesso :
