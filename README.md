@@ -3,8 +3,8 @@
 ### Requisitos :
 - Download da IDE [OpenCobol](https://launchpad.net/cobcide/+download)
 - Download repositorio do git: `git clone https://github.com/leorss/carteira-clientes.git`
-- Compilar os arquivos fontes através da IDE do OpenCobol.
-- Instruções de uso no arquivo "manual.docx" localizado no diretorio "documentos"".
+- Compilar os códigos fonte na IDE do OpenCobol.
+- Para maiores detalhes, consultar o arquivo "manual.docx" localizado no diretorio "documentos"".
 
 
 ### Mapa do sistema:
