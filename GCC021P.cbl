@@ -175,7 +175,7 @@
            SET ENVIRONMENT 'ESCDELAY'              TO '25'.
 
            PERFORM UNTIL W-FIM EQUAL "S"
-
+               MOVE "N"                    TO W-VOLTAR
                MOVE "Relatorio Cliente"    TO W-MODULO
                MOVE WID-ARQ-REL-CLIE       TO W-ARQ-RELATO
                                               S-NOME-ARQ
@@ -271,11 +271,10 @@
       *----------------------------------------------------------------*
 
       *----------------------------------------------------------------*
-       2000-PROCESSAR.
+       2000-PROCESSAR                  SECTION.
       *----------------------------------------------------------------*
 
            MOVE "N"                    TO W-GRAVADO
-           MOVE "N"                    TO W-VOLTAR
            MOVE 0                      TO W-PAGINAS
            MOVE 0                      TO W-LINHAS
 
