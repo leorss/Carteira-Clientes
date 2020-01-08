@@ -145,7 +145,7 @@
            SET ENVIRONMENT 'ESCDELAY'              TO '25'.
 
            PERFORM UNTIL W-FIM EQUAL "S"
-
+               MOVE "N"                    TO W-VOLTAR
                MOVE "Relatorio Vendedores"
                                            TO W-MODULO
                MOVE WID-ARQ-REL-VEND       TO W-ARQ-RELATO
@@ -194,11 +194,10 @@
       *----------------------------------------------------------------*
 
       *----------------------------------------------------------------*
-       2000-PROCESSAR.
+       2000-PROCESSAR                  SECTION.
       *----------------------------------------------------------------*
 
-           MOVE "N"                    TO W-GRAVADO
-           MOVE "N"                    TO W-VOLTAR
+           MOVE "N"                    TO W-GRAVADO           
            MOVE 0                      TO W-PAGINAS
            MOVE 0                      TO W-LINHAS
 
